@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "874497066463",
+    "project_id": "higherlowerapp",
+    "storage_bucket": "higherlowerapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:874497066463:android:d4a5e1156574c05cb5306a",
+        "android_client_info": {
+          "package_name": "com.excal.higherlower"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "874497066463-litk5v3pfbt09f0t460upv69s8sv6b0q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAK8yXvoMfT6KEfwidjjxO0K3pSuguVcY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "874497066463-litk5v3pfbt09f0t460upv69s8sv6b0q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
