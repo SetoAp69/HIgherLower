@@ -5,6 +5,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,10 +24,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var fragmentManager: FragmentManager
+
+    private lateinit var playBtn: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         binding=ActivityMainBinding.inflate(layoutInflater)
         firebaseAuth=Firebase.auth
         fragmentManager=supportFragmentManager
+
+        playBtn=binding.btnPlay
+
         val currentUser=firebaseAuth.currentUser
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -34,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         if(currentUser!=null){
 
-            binding.tvEmail.text=currentUser.email.toString()
+
         }else{
             Log.i(TAG,"Auth Not Found")
         }
@@ -62,6 +69,11 @@ class MainActivity : AppCompatActivity() {
                 setReorderingAllowed(true)
                 addToBackStack("name")
             }
+
+            playBtn.isEnabled=false
+            playBtn.alpha=0f
+
+
 
 //            val intent= Intent(this@MainActivity, SigninActivity::class.java)
 //            startActivity(intent)

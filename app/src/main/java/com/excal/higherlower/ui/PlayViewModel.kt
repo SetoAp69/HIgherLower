@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
 import java.io.IOException
+import kotlin.math.abs
 
 sealed interface MovieUiState{
     data class Success(val data:String):MovieUiState
@@ -27,13 +28,27 @@ class PlayViewModel(private val movieRepository: MovieRepository): ViewModel() {
     private val _movieList= MutableLiveData<List<Movie>>()
     val movieList: LiveData<List<Movie>> get()=_movieList
 
+    var currentMovieIndex:Int=0
+    var nextMovieIndex:Int=1
+
+
+    private val _playedMovieList=MutableLiveData<List<Movie>>()
+    val playedMovieList:LiveData<List<Movie>> get()= _playedMovieList
+
+
+    fun updatePlayedMovie(movies:List<Movie>){
+        _playedMovieList.value=movies.shuffled()
+    }
+
+
+
      fun getMoviesData(){
          val authKey="Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MWM2ODZiZWFiOTlkYTRmZmZlYzM0OGU5Yzc4NTg5NSIsIm5iZiI6MTczNjAzMzM3Ny43NjE5OTk4LCJzdWIiOiI2Nzc5YzQ2MTJiMDk3YjE1YTI3NGNiNDIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.nWUbIv3UjN1PEkjNtLE_KPSjBS52JMQntn4ej5yEVv8"
-
-        viewModelScope.launch(Dispatchers.IO){
+         val page=Math.ceil((Math.random()*10)).toInt()
+         viewModelScope.launch(Dispatchers.IO){
 
             try{
-                val call=movieRepository.getMovies(authKey)
+                val call=movieRepository.getMovies(authKey,page)
                 withContext(Dispatchers.Main){
                     _movieList.value=call
                 }

@@ -122,6 +122,9 @@ dependencies {
     //Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
+    //Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
