@@ -1,4 +1,4 @@
-package com.excal.higherlower
+package com.excal.higherlower.ui
 
 import android.content.ContentValues.TAG
 import android.content.Intent
@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.excal.higherlower.R
 import com.excal.higherlower.databinding.ActivitySigninBinding
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
@@ -90,7 +91,7 @@ class SigninActivity : AppCompatActivity() {
         super.onStart()
         val currentUser=firebaseAuth.currentUser
         if(currentUser!=null){
-            val intent=Intent(this@SigninActivity,MainActivity::class.java)
+            val intent=Intent(this@SigninActivity, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -111,7 +112,7 @@ class SigninActivity : AppCompatActivity() {
                                     task->
                                     if(task.isSuccessful){
                                         val user=firebaseAuth.currentUser
-                                        val intent=Intent(this@SigninActivity,MainActivity::class.java)
+                                        val intent=Intent(this@SigninActivity, MainActivity::class.java)
                                         startActivity(intent)
                                         finish()
                                     }else{

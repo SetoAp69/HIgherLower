@@ -1,4 +1,5 @@
-package com.excal.higherlower
+package com.excal.higherlower.ui
+
 
 import android.content.ContentValues.TAG
 import android.content.Intent
@@ -8,18 +9,24 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
+import com.excal.higherlower.R
 import com.excal.higherlower.databinding.ActivityMainBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var fragmentManager: FragmentManager
     override fun onCreate(savedInstanceState: Bundle?) {
         binding=ActivityMainBinding.inflate(layoutInflater)
         firebaseAuth=Firebase.auth
+        fragmentManager=supportFragmentManager
         val currentUser=firebaseAuth.currentUser
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,11 +45,27 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        binding.btnSignOut.setOnClickListener{
-            signOut()
-            val intent= Intent(this@MainActivity,SigninActivity::class.java)
-            startActivity(intent)
-            finish()
+        binding.btnPlay.setOnClickListener{
+//            signOut()
+            val playFragment=PlayFragment()
+            val fragment=fragmentManager.findFragmentByTag(PlayFragment::class.java.simpleName)
+            fragmentManager.commit{
+//                if (fragment != null) {
+//                    replace(R.id.fragment_play,fragment)
+//                    setReorderingAllowed(true)
+//                    addToBackStack("name")
+//                }
+//                else{
+//                    Log.i(TAG,"Fragment is Missing!!")
+//                }
+                replace<PlayFragment>(R.id.fragment_play)
+                setReorderingAllowed(true)
+                addToBackStack("name")
+            }
+
+//            val intent= Intent(this@MainActivity, SigninActivity::class.java)
+//            startActivity(intent)
+//            finish()
         }
 
 

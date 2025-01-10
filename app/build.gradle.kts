@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
+    id("kotlin-parcelize")
+    kotlin("kapt")
 }
 
 android {
@@ -77,6 +80,10 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.firebase.auth)
 
+    //AndroidX fragment
+    implementation("androidx.fragment:fragment:1.8.5")
+    implementation("androidx.fragment:fragment-ktx:1.8.5")
+
     //Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     //Firebase Auth
@@ -102,7 +109,18 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
     implementation(libs.androidx.media3.common.ktx)
 
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    //ViewModel
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
+
+    //Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

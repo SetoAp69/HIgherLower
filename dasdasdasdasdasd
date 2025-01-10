@@ -1,0 +1,23 @@
+[33mcommit fcc97e68b881ffa0ae24a8a6e7fc158e2a1845b3[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Seto <mocatastic77@gmail.com>
+Date:   Wed Jan 8 17:29:42 2025 +0700
+
+    Success Adding Google signin authentication using firebase and one tap client
+
+[33mcommit 0ccdd720f98802da3c3ad40f10b1503118cd8754[m
+Author: Seto <mocatastic77@gmail.com>
+Date:   Tue Jan 7 18:06:36 2025 +0700
+
+    Success Adding Google Signin Authentication ("I still don't really know how does it works")
+
+[33mcommit 909b8ba02edac155a453226e1296c040cb2a8d89[m
+Author: Seto <setoapriawan69@gmail.com>
+Date:   Tue Jan 7 17:56:31 2025 +0700
+
+    Success Adding Google Signin Authentication ("I still don't really know how does it works")
+
+[33mcommit 05fdf625aa9864d54d4cd4e7438b28f4ebc98383[m
+Author: Seto <setoapriawan69@gmail.com>
+Date:   Mon Jan 6 17:07:21 2025 +0700
+
+    Initial Commit
