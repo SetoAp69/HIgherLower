@@ -12,7 +12,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/TextView"
         android:text="Is it Higher or Lower?"
+        android:textSize="30sp"
         android:layout_marginTop="25dp"
+        android:textStyle="bold"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +50,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:textSize="18sp"
                 android:layout_marginHorizontal="8dp"
                 android:id="@+id/tv_title1"
@@ -59,8 +61,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
                 android:layout_marginHorizontal="8dp"
                 android:id="@+id/tv_release_date_1"
                 android:text="2069"
@@ -99,7 +101,7 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:textSize="18sp"
             android:layout_marginHorizontal="8dp"
             android:id="@+id/tv_title2"
@@ -110,8 +112,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:textSize="18sp"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp"
             android:layout_marginHorizontal="8dp"
             android:id="@+id/tv_release_date_2"
             android:text="2069"
@@ -138,7 +140,7 @@
     <Button
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_lower_2"
+        android:id="@+id/btn_lower"
         android:layout_marginTop="20dp"
         android:text="Lower"
         android:layout_marginHorizontal="25dp"
@@ -148,6 +150,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
+
+    <TextView
+        android:id="@+id/tv_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:layout_marginTop="25dp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+
+        app:layout_constraintTop_toBottomOf="@id/btn_lower"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 
 
 

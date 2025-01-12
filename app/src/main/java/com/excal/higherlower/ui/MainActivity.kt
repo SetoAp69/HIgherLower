@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
@@ -32,11 +33,12 @@ class MainActivity : AppCompatActivity() {
         firebaseAuth=Firebase.auth
         fragmentManager=supportFragmentManager
 
-        playBtn=binding.btnPlay
 
         val currentUser=firebaseAuth.currentUser
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        replaceFragment(HomeFragment(),true)
 
 
         if(currentUser!=null){
@@ -52,38 +54,40 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        binding.btnPlay.setOnClickListener{
-//            signOut()
-            val playFragment=PlayFragment()
-            val fragment=fragmentManager.findFragmentByTag(PlayFragment::class.java.simpleName)
-            fragmentManager.commit{
-//                if (fragment != null) {
-//                    replace(R.id.fragment_play,fragment)
-//                    setReorderingAllowed(true)
-//                    addToBackStack("name")
-//                }
-//                else{
-//                    Log.i(TAG,"Fragment is Missing!!")
-//                }
-                replace<PlayFragment>(R.id.fragment_play)
-                setReorderingAllowed(true)
-                addToBackStack("name")
+
+//        binding.btnPlay.setOnClickListener{
+//            val fragment=fragmentManager.findFragmentByTag(PlayFragment::class.java.simpleName)
+//            fragmentManager.commit{
+//                replace<PlayFragment>(R.id.fragment_play)
+//                setReorderingAllowed(true)
+//                addToBackStack("Play")
+//            }
+//
+////            playBtn.isEnabled=false
+////            playBtn.alpha=0f
+//
+//        }
+
+
+
+
+
+    }
+
+    fun replaceFragment(fragment: Fragment, addToBackStack:Boolean){
+        val existingFragment=fragmentManager.findFragmentByTag(fragment::class.java.simpleName)
+        fragmentManager.commit {
+            if(existingFragment!=null){
+                replace(R.id.fragment_play,existingFragment,fragment::class.java.simpleName)
+            }else{
+                replace(R.id.fragment_play,fragment,fragment::class.java.simpleName)
+
             }
-
-            playBtn.isEnabled=false
-            playBtn.alpha=0f
-
-
-
-//            val intent= Intent(this@MainActivity, SigninActivity::class.java)
-//            startActivity(intent)
-//            finish()
+            setReorderingAllowed(true)
+            if(addToBackStack){
+                addToBackStack(fragment::class.java.simpleName)
+            }
         }
-
-
-
-
-
     }
 
     private fun signOut(){

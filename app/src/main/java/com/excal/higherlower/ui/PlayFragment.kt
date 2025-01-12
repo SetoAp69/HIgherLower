@@ -51,6 +51,11 @@ class PlayFragment : Fragment() {
 
     private lateinit var playButton:Button
 
+    private lateinit var higherButton:Button
+    private lateinit var lowerButton:Button
+
+    private lateinit var scoreText:TextView
+
 
 
 
@@ -82,6 +87,20 @@ class PlayFragment : Fragment() {
         movieReleaseDate1=binding.tvReleaseDate1
         movieReleaseDate2=binding.tvReleaseDate2
 
+        higherButton=binding.btnHigher
+        lowerButton=binding.btnLower
+
+        scoreText=binding.tvScore
+
+        higherButton.setOnClickListener{
+            compareMovie(true)
+
+
+        }
+
+        lowerButton.setOnClickListener{
+            compareMovie(false)
+        }
 
 
 
@@ -158,31 +177,41 @@ class PlayFragment : Fragment() {
         })
     }
 
-    fun compareMovie(movieA:Movie, movieB:Movie){
+    fun compareMovie(isHigher:Boolean){
         playViewModel.playedMovieList.observe(viewLifecycleOwner,Observer{playedMovie->
             val currentMovie=playedMovie[playViewModel.currentMovieIndex]
             val nextMovie=playedMovie[playViewModel.nextMovieIndex]
-
-            if(movieA.vote_average>=movieB.vote_average) {
-                if(movieA==currentMovie){
-                    playViewModel.nextMovieIndex++
-                }else{
-                    playViewModel.currentMovieIndex=playViewModel.nextMovieIndex
-                    playViewModel.nextMovieIndex++
+            if(isHigher){
+                if(currentMovie.vote_average>nextMovie.vote_average){
+                    playViewModel.score++
                 }
+
             }else{
-                if(movieA==currentMovie){
-                    playViewModel.nextMovieIndex++
-                }else{
-                    playViewModel.currentMovieIndex=playViewModel.nextMovieIndex
-                    playViewModel.nextMovieIndex++
+                if(currentMovie.vote_average<nextMovie.vote_average){
+                    playViewModel.score++
                 }
             }
+
+            if(playViewModel.nextMovieIndex==playedMovie.size-1){
+                (activity as MainActivity).replaceFragment(HomeFragment(),false)
+
+
+            }else{
+                playViewModel.currentMovieIndex++
+                playViewModel.nextMovieIndex++
+            }
+
+
+            updateScore(playViewModel.score)
 
             showMovies()
 
         })
 
+    }
+
+    fun updateScore(score:Int){
+        scoreText.text=score.toString()
     }
 
 

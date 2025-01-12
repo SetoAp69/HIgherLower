@@ -30,7 +30,7 @@ class PlayViewModel(private val movieRepository: MovieRepository): ViewModel() {
 
     var currentMovieIndex:Int=0
     var nextMovieIndex:Int=1
-
+    var score:Int=0
 
     private val _playedMovieList=MutableLiveData<List<Movie>>()
     val playedMovieList:LiveData<List<Movie>> get()= _playedMovieList
