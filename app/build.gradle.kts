@@ -152,4 +152,7 @@ dependencies {
 
     //Compose Async Image
     implementation("io.coil-kt:coil-compose:2.3.0")
+
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0") // Replace with the latest version
+
 }

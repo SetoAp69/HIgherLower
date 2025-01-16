@@ -175,9 +175,9 @@ private fun ClassicButtonPreview() {
 }
 
 @Composable
-fun CompareButton(modifier: Modifier = Modifier, title: String, icon: ImageVector) {
+fun CompareButton(modifier: Modifier = Modifier, title: String, icon: ImageVector,onClick:()->Unit) {
     OutlinedButton(
-        onClick = { /*TODO*/ },
+        onClick = onClick,
 //        shape = MaterialTheme.shapes.small,
         modifier = modifier.widthIn(min=150.dp),
         border = BorderStroke(width = 2.dp, color = Color.Cyan)
@@ -199,8 +199,8 @@ private fun CompareButtonPreview() {
     HIgherLowerTheme {
         Row(){
 
-            CompareButton(title = "HIGHER", icon = Icons.Outlined.KeyboardArrowUp)
-            CompareButton(title = "LOWER", icon = Icons.Outlined.KeyboardArrowDown)
+            CompareButton(title = "HIGHER", icon = Icons.Outlined.KeyboardArrowUp, onClick = {})
+            CompareButton(title = "LOWER", icon = Icons.Outlined.KeyboardArrowDown, onClick = {})
 
         }
     }

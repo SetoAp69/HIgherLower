@@ -1,6 +1,16 @@
 package com.excal.higherlower.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+
 class MovieRepository(private val api:APIServices) {
+
+    private val _playedMovieList= MutableLiveData<List<Movie>>()
+    val playedMovieList: LiveData<List<Movie>> get()=_playedMovieList
+
+    fun updatePlayedMovie(movies:List<Movie>){
+        _playedMovieList.value=movies
+    }
 
     suspend fun getMovies(authToken:String,page:Int):List<Movie>{
         return try{
@@ -11,4 +21,6 @@ class MovieRepository(private val api:APIServices) {
             }
 
     }
+
+
 }
