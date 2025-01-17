@@ -28,6 +28,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.excal.higherlower.component.CompareScreen
+import com.excal.higherlower.component.MainMenu
+import com.excal.higherlower.component.MainMenuScreen
 import com.excal.higherlower.data.MovieApi
 import com.excal.higherlower.ui.MovieViewModel
 import com.excal.higherlower.ui.MovieViewModelFactory
@@ -49,7 +51,7 @@ class Compose : ComponentActivity() {
 //                    )
 //                }
                 Column {
-                    App()
+                    MainMenu()
                 }
 
             }

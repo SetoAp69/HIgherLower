@@ -155,4 +155,7 @@ dependencies {
 
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0") // Replace with the latest version
 
+
+    //Google Fonts
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.7.6")
 }

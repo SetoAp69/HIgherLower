@@ -2,9 +2,25 @@ package com.excal.higherlower.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+
+import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.sp
+import com.excal.higherlower.R
+
+
+val SpaceMono = FontFamily(
+    Font(R.font.spacemono_regular, FontWeight.Normal),
+    Font(R.font.spacemono_italic, FontWeight.Normal,FontStyle.Italic),
+    Font(R.font.spacemono_bold,FontWeight.Bold),
+    Font(R.font.spacemono_bolditalic, FontWeight.Bold, FontStyle.Italic),
+)
+
+
 
 // Set of Material typography styles to start with
 val Typography = Typography(

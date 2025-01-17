@@ -14,14 +14,14 @@ import androidx.compose.ui.platform.LocalContext
 
 
 private val DarkColorScheme = darkColorScheme(
-    background = Color(0xFF000000),
+    background = Black,
     primary = Purple80,
     secondary = PurpleGrey80,
     tertiary = Pink80
 )
 
 private val LightColorScheme = lightColorScheme(
-    background = Color(0xFF000000),
+    background = Black,
     primary = Purple40,
     secondary = PurpleGrey40,
     tertiary = Pink40
