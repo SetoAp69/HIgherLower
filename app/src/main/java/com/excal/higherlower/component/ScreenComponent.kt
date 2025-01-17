@@ -3,18 +3,16 @@ package com.excal.higherlower.component
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,41 +25,27 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.excal.higherlower.data.Movie
 
-import com.excal.higherlower.data.MovieApi
-import com.excal.higherlower.ui.CompareViewModel
-import com.excal.higherlower.ui.CompareViewModelFactory
 import com.excal.higherlower.ui.MovieViewModel
-import com.excal.higherlower.ui.PlayViewModel
-import com.excal.higherlower.ui.PlayViewModelFactory
 import com.excal.higherlower.ui.theme.HIgherLowerTheme
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.excal.higherlower.ui.theme.SoftBlue
+import com.excal.higherlower.ui.theme.SoftGreen
+import com.excal.higherlower.ui.theme.SoftRed
 
 @Composable
 fun EndGameScreen(modifier: Modifier = Modifier) {
@@ -167,13 +151,10 @@ fun CompareScreen(
     modifier: Modifier = Modifier,
     listMovie: List<Movie>,
     sharedViewModel: MovieViewModel
-    ) {
-    val factory=CompareViewModelFactory(sharedViewModel)
-    val viewModel:CompareViewModel = viewModel(factory=factory)
-    val gameState by viewModel.state.collectAsState()
-//    val gameState by remember {
-//        mutableStateOf(gameState_)
-//    }
+) {
+
+    val viewModel: MovieViewModel = sharedViewModel
+    val gameState by viewModel.gameState.collectAsState()
     val movieIndex = gameState.movieIndex
 
 
@@ -189,7 +170,7 @@ fun CompareScreen(
             Row(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp),
+                    .padding(start = 0.dp, end = 0.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -238,15 +219,16 @@ fun CompareScreen(
 
         }
 
-        Spacer(modifier = modifier.padding(top = 12.dp, bottom = 12.dp))
-
         Text(
             text = "Movie on the RIGHT has Higher or Lower Rating?",
             color = Color.White,
             fontSize = 18.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            modifier = modifier.clip(RoundedCornerShape(0.dp)).background(color = SoftBlue).padding(top = 8.dp,bottom=8.dp)
         )
-        Spacer(modifier = modifier.padding(top = 12.dp, bottom = 12.dp))
+
+        Spacer(modifier = modifier.padding(top = 24.dp, bottom = 24.dp))
 
         Row(
             modifier = modifier
@@ -259,45 +241,42 @@ fun CompareScreen(
             CompareButton(
                 title = "LOWER",
                 icon = Icons.Default.KeyboardArrowUp,
+                color = SoftRed,
                 onClick = {
                     viewModel.onCompareClick(
                         movieIndex = movieIndex,
                         list = listMovie,
                         isHigher = false
                     )
-//                    if(gameState.isFinish){
-//                        sharedViewModel.fetchMovie(gameState.page)
-//                    }
                     Log.d(TAG, "${movieIndex}")
                 })
             Spacer(modifier = modifier.padding(start = 2.dp, end = 2.dp))
             CompareButton(
                 title = "HIGHER",
                 icon = Icons.Default.KeyboardArrowDown,
+                color = SoftGreen,
                 onClick = {
                     viewModel.onCompareClick(
                         movieIndex = movieIndex,
                         list = listMovie,
                         isHigher = true
                     )
-//                    if(gameState.isFinish){
-//                        sharedViewModel.fetchMovie(gameState.page)
-//
-//                    }
-                    Log.d(TAG, "Movie Index : ${movieIndex}")
-                    Log.d(TAG, "isCorrect : ${gameState.isCorrect}")
-                    Log.d(TAG, "isAnswered : ${gameState.isAnswered}")
-                    Log.d(TAG, "isFinish : ${gameState.isFinish}")
-                    Log.d(TAG, "Game Score : ${gameState.score}")
-
                 }
             )
 
 
         }
-        Spacer(modifier = modifier.padding(start = 2.dp, end = 2.dp))
-        Text(text = "${gameState.score}", fontSize = 30.sp, color = Color.White)
 
+        Spacer(modifier = modifier.padding(top = 12.dp, bottom = 12.dp))
+        Text(text = "Score : ", fontSize = 30.sp, color = Color.White, fontWeight = FontWeight.Bold)
+
+        Text(
+            text = "${gameState.score}",
+            fontSize = 30.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            modifier = modifier.padding(top = 5.dp)
+        )
 
     }
 }

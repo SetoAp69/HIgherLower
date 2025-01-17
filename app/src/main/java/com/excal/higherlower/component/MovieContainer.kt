@@ -5,9 +5,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
@@ -32,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.times
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.excal.higherlower.R
@@ -53,11 +56,15 @@ fun MovieContainer(
                 .crossfade(true).build(),
             contentDescription = null,
             modifier = modifier
-                .padding()
-                .background(Color.Black),
+                .widthIn(min=160.dp)
+                .heightIn(min=(160*1.8).dp)
+
+
+                .background(Color.Black)
+            ,
             placeholder = placeholder,
             contentScale = ContentScale.Crop,
-            alpha = 0.6f,
+            alpha = 0.5f,
             onSuccess = {
                 imageIsLoaded=true
             },

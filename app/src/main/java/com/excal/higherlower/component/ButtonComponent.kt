@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
@@ -28,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -37,6 +41,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.excal.higherlower.ui.theme.HIgherLowerTheme
+import com.excal.higherlower.ui.theme.SoftGreen
+import com.excal.higherlower.ui.theme.SoftRed
 
 
 @Composable
@@ -175,20 +181,31 @@ private fun ClassicButtonPreview() {
 }
 
 @Composable
-fun CompareButton(modifier: Modifier = Modifier, title: String, icon: ImageVector,onClick:()->Unit) {
-    OutlinedButton(
+fun CompareButton(
+    modifier: Modifier = Modifier,
+    title: String,
+    icon: ImageVector,
+    color:Color,
+    onClick: () -> Unit
+) {
+    Button(
         onClick = onClick,
 //        shape = MaterialTheme.shapes.small,
-        modifier = modifier.widthIn(min=150.dp),
-        border = BorderStroke(width = 2.dp, color = Color.Cyan)
+        shape= RoundedCornerShape(15.dp),
+        colors = ButtonDefaults.buttonColors(color),
+        modifier = modifier
+
+            .widthIn(min = 150.dp)
+            .heightIn(min = 90.dp),
+
     ) {
-        Text(text = title, color = Color.Cyan)
+        Text(text = title, color = Color.White, fontSize = 25.sp)
         Spacer(modifier = modifier.padding(ButtonDefaults.IconSpacing))
         Icon(
             imageVector = icon,
-            tint = Color.Cyan,
+            tint = Color.White,
             contentDescription = null,
-            modifier = modifier.size(ButtonDefaults.IconSize)
+            modifier = modifier.size(35.dp)
         )
     }
 }
@@ -197,10 +214,10 @@ fun CompareButton(modifier: Modifier = Modifier, title: String, icon: ImageVecto
 @Composable
 private fun CompareButtonPreview() {
     HIgherLowerTheme {
-        Row(){
+        Row() {
 
-            CompareButton(title = "HIGHER", icon = Icons.Outlined.KeyboardArrowUp, onClick = {})
-            CompareButton(title = "LOWER", icon = Icons.Outlined.KeyboardArrowDown, onClick = {})
+            CompareButton(title = "HIGHER", icon = Icons.Filled.KeyboardArrowUp, onClick = {},color=SoftRed)
+            CompareButton(title = "LOWER", icon = Icons.Filled.KeyboardArrowDown, onClick = {}, color = SoftGreen)
 
         }
     }

@@ -49,7 +49,6 @@ class Compose : ComponentActivity() {
 //                    )
 //                }
                 Column {
-                    Text(text = "Movie List : ")
                     App()
                 }
 
@@ -117,6 +116,6 @@ fun App(modifier: Modifier = Modifier) {
 @Composable
 private fun AppPreview() {
     HIgherLowerTheme {
-
+        App()
     }
 }
