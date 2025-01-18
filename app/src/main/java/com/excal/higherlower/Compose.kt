@@ -1,19 +1,18 @@
 package com.excal.higherlower
 
-import android.graphics.Color
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.Animatable
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,37 +25,51 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.excal.higherlower.component.CompareScreen
-import com.excal.higherlower.component.MainMenu
+import com.excal.higherlower.component.SignInScreen
 import com.excal.higherlower.component.MainMenuScreen
 import com.excal.higherlower.data.MovieApi
+import com.excal.higherlower.presentation.sign_in.GoogleAuthClient
+import com.excal.higherlower.presentation.sign_in.SignInViewModel
 import com.excal.higherlower.ui.MovieViewModel
 import com.excal.higherlower.ui.MovieViewModelFactory
-import com.excal.higherlower.ui.PlayViewModelFactory
+import com.excal.higherlower.ui.Navigation
 import com.excal.higherlower.ui.UiState
 import com.excal.higherlower.ui.theme.HIgherLowerTheme
+import com.google.android.gms.auth.api.identity.Identity
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class Compose : ComponentActivity() {
+    private val googleAuthClient by lazy {
+        GoogleAuthClient(
+            context = applicationContext,
+            oneTapClient = Identity.getSignInClient(applicationContext)
+
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             HIgherLowerTheme {
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    Greeting(
-//                        name = "Android",
-//                        modifier = Modifier.padding(innerPadding)
-//                    )
-//                }
-                Column {
-                    MainMenu()
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    Navigation(googleAuthClient = googleAuthClient, this@Compose)
                 }
+
 
             }
         }
     }
+
+
 }
 
 @Composable
@@ -75,49 +88,4 @@ fun GreetingPreview() {
     }
 }
 
-@Composable
-fun App(modifier: Modifier = Modifier) {
-    val factory = MovieViewModelFactory(MovieApi.retrofitServices)
-    val viewModel: MovieViewModel = viewModel(factory = factory)
-    var movieIndex by remember{mutableStateOf(0)}
 
-    val movieList = viewModel.movieListFlow.collectAsState(initial = UiState.Loading)
-    when (val state = movieList.value) {
-        is UiState.Loading -> {
-            val alpha=remember{ androidx.compose.animation.core.Animatable(1f) }
-            LaunchedEffect(UiState.Loading) {
-                while(true){
-                    delay(100L)
-                    alpha.animateTo(0f)
-                    alpha.animateTo(1f)
-                }
-            }
-            Column(
-                modifier = modifier,
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "Loading", modifier=modifier.alpha(alpha.value))
-
-            }
-        }
-
-        is UiState.Success -> {
-            val listMovie = state.data
-            CompareScreen(listMovie=listMovie, sharedViewModel = viewModel)
-        }
-
-        is UiState.Error -> {
-            Text(text = "Error")
-        }
-    }
-}
-
-
-@Preview(showBackground = true, backgroundColor = 0L)
-@Composable
-private fun AppPreview() {
-    HIgherLowerTheme {
-        App()
-    }
-}

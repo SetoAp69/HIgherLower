@@ -128,7 +128,7 @@ fun MenuButton1(
     color:Color= SoftOrange
 ) {
     Button(
-        onClick = { onClick },
+        onClick = { onClick() },
         shape = RoundedCornerShape(18.dp),
         colors = ButtonDefaults.buttonColors(color),
         modifier = modifier

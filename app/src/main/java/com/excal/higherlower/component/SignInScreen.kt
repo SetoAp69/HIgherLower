@@ -1,9 +1,8 @@
 package com.excal.higherlower.component
 
 
-import android.widget.Button
+import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,26 +11,33 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.excal.higherlower.R
-import com.excal.higherlower.ui.theme.Black
+import com.excal.higherlower.presentation.sign_in.SignInState
 import com.excal.higherlower.ui.theme.HIgherLowerTheme
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun SignInScreen(modifier: Modifier = Modifier, state: SignInState, onSignInClick: () -> Unit) {
 
+    val context = LocalContext.current
+    LaunchedEffect(key1 = state.signInError) {
+        state.signInError?.let { error ->
+            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
@@ -39,8 +45,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             contentDescription = null,
             modifier = modifier
                 .padding(top = 70.dp)
-                .size(245.dp)
-                ,
+                .size(245.dp),
         )
         Spacer(modifier = modifier.padding(top = 25.dp))
         Text(
@@ -51,8 +56,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             color = Color.White
         )
         Button(
-            onClick = { /*TODO*/ },
-            colors=ButtonDefaults.buttonColors(Color.White),
+            onClick = { onSignInClick() },
+            colors = ButtonDefaults.buttonColors(Color.White),
             modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 70.dp),
@@ -69,7 +74,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     contentDescription = null,
                     Modifier.size(18.dp)
                 )
-                Text(text = "Login with Google", fontSize = 18.sp,color= Color.Black)
+                Text(text = "Login with Google", fontSize = 18.sp, color = Color.Black)
 
             }
         }
@@ -84,6 +89,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 private fun LoginScreenPreview() {
     HIgherLowerTheme {
 
-        LoginScreen()
+//        LoginScreen()
     }
 }

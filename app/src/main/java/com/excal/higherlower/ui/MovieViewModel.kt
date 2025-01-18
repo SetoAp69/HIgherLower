@@ -119,6 +119,7 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
                         )
                     }
                     delay(1000L)
+
                     if(_gameState.value.isFinish){
                         Log.d(TAG,"GAME FINISHED ! ")
                     }else{

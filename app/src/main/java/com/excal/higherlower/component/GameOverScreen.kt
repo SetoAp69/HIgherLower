@@ -14,11 +14,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.excal.higherlower.ui.Screen
 import com.excal.higherlower.ui.theme.HIgherLowerTheme
 import com.excal.higherlower.ui.theme.SoftRed
 
 @Composable
-fun GameOverScreen(modifier: Modifier = Modifier) {
+fun GameOverScreen(modifier: Modifier = Modifier,score:Int?=0,navController: NavController) {
 
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier=modifier.padding(top=24.dp))
@@ -31,7 +34,7 @@ fun GameOverScreen(modifier: Modifier = Modifier) {
             ,
         )
         Text(
-            text = "2143213",
+            text = "${score}",
             color = Color.White,
             fontSize = 48.sp,
             fontWeight = FontWeight.Bold,
@@ -42,9 +45,15 @@ fun GameOverScreen(modifier: Modifier = Modifier) {
             ,
         )
         Spacer(modifier = Modifier.padding(24.dp))
-        MenuButton1(onClick = { /*TODO*/ }, text = "Play Again")
+        MenuButton1(onClick = {navController.navigate(Screen.NormalMode.route){
+            popUpTo(Screen.GameOverScreen.withArgs("${score}")){
+                inclusive=true
+                saveState=true
+            }
+        } }, text = "Play Again")
         Spacer(modifier = Modifier.padding(16.dp))
-        MenuButton1(onClick = { /*TODO*/ }, color = SoftRed ,text = "Back to Menu")
+        MenuButton1(onClick = {navController.popBackStack()
+        }, color = SoftRed ,text = "Back to Menu")
 
     }
 
@@ -54,6 +63,6 @@ fun GameOverScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun GameOverScreenPreview() {
     HIgherLowerTheme {
-        GameOverScreen()
+
     }
 }

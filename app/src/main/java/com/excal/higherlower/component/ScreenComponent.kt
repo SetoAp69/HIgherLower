@@ -25,11 +25,13 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
@@ -38,10 +40,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 
 import com.excal.higherlower.data.Movie
 
 import com.excal.higherlower.ui.MovieViewModel
+import com.excal.higherlower.ui.Screen
 import com.excal.higherlower.ui.theme.HIgherLowerTheme
 import com.excal.higherlower.ui.theme.SoftBlue
 import com.excal.higherlower.ui.theme.SoftGreen
@@ -110,47 +115,15 @@ private fun EndGameScreenPreview() {
     }
 }
 
-@Composable
-fun MainMenuScreen(modifier: Modifier = Modifier) {
-    Column(
-        modifier = Modifier
-            .background(color = Color.Black)
-            .padding(10.dp),
 
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Select Game Mode",
-            fontSize = 36.sp,
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            modifier = modifier.padding(bottom = 50.dp)
-        )
-        MenuButton(title = "Classic Mode")
-        Spacer(modifier = Modifier.padding(top = 12.dp, bottom = 12.dp))
-        MenuButton(title = "Timetrials")
-        Spacer(modifier = Modifier.padding(top = 12.dp, bottom = 12.dp))
-        MenuButton(title = "Leaderboard")
-        Spacer(modifier = Modifier.padding(top = 12.dp, bottom = 12.dp))
-        ExitButton()
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun MainMenuScreenPreview() {
-    HIgherLowerTheme {
-        MainMenuScreen()
-    }
-}
 
 
 @Composable
 fun CompareScreen(
     modifier: Modifier = Modifier,
     listMovie: List<Movie>,
-    sharedViewModel: MovieViewModel
+    sharedViewModel: MovieViewModel,
+    navController:NavController
 ) {
 
     val viewModel: MovieViewModel = sharedViewModel
@@ -163,6 +136,7 @@ fun CompareScreen(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Box(
             modifier = modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
@@ -174,6 +148,16 @@ fun CompareScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                LaunchedEffect(key1=gameState.isFinish) {
+                    if(gameState.isFinish){
+                        navController.navigate(Screen.GameOverScreen.withArgs("${gameState.score}")){
+                            popUpTo(Screen.NormalMode.route){
+                                saveState =true
+                                inclusive =true
+                            }
+                        }
+                    }
+                }
                 MovieContainer(movie = listMovie[movieIndex], isLeft = true)
                 MovieContainer(movie = listMovie[movieIndex + 1], isLeft = false)
             }
@@ -225,7 +209,10 @@ fun CompareScreen(
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
-            modifier = modifier.clip(RoundedCornerShape(0.dp)).background(color = SoftBlue).padding(top = 8.dp,bottom=8.dp)
+            modifier = modifier
+                .clip(RoundedCornerShape(0.dp))
+                .background(color = SoftBlue)
+                .padding(top = 8.dp, bottom = 8.dp)
         )
 
         Spacer(modifier = modifier.padding(top = 24.dp, bottom = 24.dp))
@@ -290,6 +277,13 @@ fun CompareMovie(movieRate1: Movie, movieRate2: Movie): Boolean {
 private fun CompareScreenPreview() {
     HIgherLowerTheme {
 
+    }
+}
+
+@Composable
+fun LoadingScreen(modifier: Modifier = Modifier,alpha:Float) {
+    Box(modifier=modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(text = "Loading", fontSize = 24.sp, modifier = modifier.alpha(alpha))
     }
 }
 
