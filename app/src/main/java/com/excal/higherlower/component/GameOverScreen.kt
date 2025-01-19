@@ -21,17 +21,20 @@ import com.excal.higherlower.ui.theme.HIgherLowerTheme
 import com.excal.higherlower.ui.theme.SoftRed
 
 @Composable
-fun GameOverScreen(modifier: Modifier = Modifier,score:Int?=0,navController: NavController) {
+fun GameOverScreen(
+    modifier: Modifier = Modifier,
+    score: Int? = 0,
+    navController: NavController,
+    mode: String? = ""
+) {
 
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(modifier=modifier.padding(top=24.dp))
+        Spacer(modifier = modifier.padding(top = 24.dp))
         Text(
             text = "Your Score",
             color = Color.White,
             fontSize = 32.sp,
-            modifier = modifier.padding(24.dp)
-
-            ,
+            modifier = modifier.padding(24.dp),
         )
         Text(
             text = "${score}",
@@ -39,21 +42,35 @@ fun GameOverScreen(modifier: Modifier = Modifier,score:Int?=0,navController: Nav
             fontSize = 48.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Monospace,
-            modifier = modifier.padding(24.dp)
-
-
-            ,
+            modifier = modifier.padding(24.dp),
         )
         Spacer(modifier = Modifier.padding(24.dp))
-        MenuButton1(onClick = {navController.navigate(Screen.NormalMode.route){
-            popUpTo(Screen.GameOverScreen.withArgs("${score}")){
-                inclusive=true
-                saveState=true
+        MenuButton1(onClick = {
+
+            if (mode == "normal") {
+                navController.navigate(Screen.NormalMode.route)
+                {
+                    popUpTo(Screen.GameOverScreen.withArgs("${score}", mode!!)) {
+                        inclusive = true
+                        saveState = true
+                    }
+                }
+
+            } else if (mode == "blitz") {
+                navController.navigate(Screen.BlitzMode.route)
+                {
+                    popUpTo(Screen.GameOverScreen.withArgs("${score}", mode!!)) {
+                        inclusive = true
+                        saveState = true
+                    }
+                }
             }
-        } }, text = "Play Again")
+
+        }, text = "Play Again")
         Spacer(modifier = Modifier.padding(16.dp))
-        MenuButton1(onClick = {navController.popBackStack()
-        }, color = SoftRed ,text = "Back to Menu")
+        MenuButton1(onClick = {
+            navController.popBackStack()
+        }, color = SoftRed, text = "Back to Menu")
 
     }
 

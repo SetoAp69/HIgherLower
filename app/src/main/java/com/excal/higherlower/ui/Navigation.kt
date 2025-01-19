@@ -19,6 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.excal.higherlower.component.BlitzModeScreen
 import com.excal.higherlower.component.GameOverScreen
 import com.excal.higherlower.component.MainMenuScreen
 import com.excal.higherlower.component.NormalModeScreen
@@ -28,7 +29,7 @@ import com.excal.higherlower.presentation.sign_in.SignInViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun Navigation(googleAuthClient: GoogleAuthClient,lifecycleOwner: LifecycleOwner){
+fun Navigation(googleAuthClient: GoogleAuthClient, lifecycleOwner: LifecycleOwner) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.SignInScreen.route) {
         composable(Screen.SignInScreen.route) {
@@ -36,11 +37,11 @@ fun Navigation(googleAuthClient: GoogleAuthClient,lifecycleOwner: LifecycleOwner
             val state by viewModel.state.collectAsStateWithLifecycle()
 
             LaunchedEffect(key1 = Unit) {
-                if(googleAuthClient.getSignedInUser()!=null){
-                    navController.navigate("main"){
-                        popUpTo(navController.graph.findStartDestination().id){
-                            inclusive=true
-                            saveState=false
+                if (googleAuthClient.getSignedInUser() != null) {
+                    navController.navigate("main") {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
+                            saveState = false
                         }
                     }
                     viewModel.resetState()
@@ -61,10 +62,10 @@ fun Navigation(googleAuthClient: GoogleAuthClient,lifecycleOwner: LifecycleOwner
                 })
             LaunchedEffect(key1 = state.isSignInSuccessful) {
                 if (state.isSignInSuccessful) {
-                    navController.navigate("main"){
-                        popUpTo(navController.graph.findStartDestination().id){
-                            inclusive=true
-                            saveState=false
+                    navController.navigate("main") {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
+                            saveState = false
                         }
                     }
                     viewModel.resetState()
@@ -87,31 +88,44 @@ fun Navigation(googleAuthClient: GoogleAuthClient,lifecycleOwner: LifecycleOwner
         composable(Screen.MainScreen.route) {
             MainMenuScreen(
                 userData = googleAuthClient.getSignedInUser(),
-                navController=navController,
+                navController = navController,
                 onSignOut = {
-                    lifecycleOwner.lifecycleScope.launch{
+                    lifecycleOwner.lifecycleScope.launch {
                         googleAuthClient.signOut()
 
                     }
-                    navController.navigate(Screen.SignInScreen.route){
+                    navController.navigate(Screen.SignInScreen.route) {
                         popUpTo(0)
                     }
                 })
         }
-        composable(Screen.NormalMode.route){
-            NormalModeScreen(navController=navController)
+        composable(Screen.NormalMode.route) {
+            NormalModeScreen(navController = navController)
+        }
+        composable(Screen.BlitzMode.route) {
+            BlitzModeScreen(navController = navController)
         }
         composable(
-            route=Screen.GameOverScreen.route +"/{score}" ,
+            route = Screen.GameOverScreen.route + "/{score}"+"/{mode}",
             arguments = listOf(
-                navArgument("score"){
-                    type= NavType.IntType
-                    defaultValue=0
-                    nullable=false
+                navArgument("score") {
+                    type = NavType.IntType
+                    defaultValue = 0
+                    nullable = false
+                },
+                navArgument("mode") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable
                 }
+
             )
-            ){entry->
-                GameOverScreen(score=entry.arguments?.getInt("score"), navController = navController)
+        ) { entry ->
+            GameOverScreen(
+                score = entry.arguments?.getInt("score"),
+                navController = navController,
+                mode = entry.arguments?.getString("mode")
+            )
 
         }
 

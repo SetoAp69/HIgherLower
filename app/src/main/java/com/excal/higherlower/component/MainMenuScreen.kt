@@ -124,7 +124,16 @@ fun MainMenuScreen(modifier: Modifier = Modifier, userData: UserData?, onSignOut
                 },
                 text = "NORMAL MODE")
             Spacer(modifier = modifier.padding(12.dp))
-            MenuButton1(onClick = { /*TODO*/ }, text = "BLITZ")
+            MenuButton1(
+                onClick = {
+                    navController.navigate(Screen.BlitzMode.route){
+                        popUpTo(navController.graph.findStartDestination().id){
+                            saveState=true
+                            inclusive=true
+                        }
+                    }
+                },
+                text = "BLITZ")
             Spacer(modifier = modifier.padding(12.dp))
             MenuButton1(onClick = {activity?.finish()  }, text = "Exit", color = SoftRed)
         }

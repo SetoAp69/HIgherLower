@@ -28,6 +28,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -129,7 +131,8 @@ fun CompareScreen(
     val viewModel: MovieViewModel = sharedViewModel
     val gameState by viewModel.gameState.collectAsState()
     val movieIndex = gameState.movieIndex
-
+    val isLeftImageLoaded = remember{ mutableStateOf(false) }
+    val isRightImageLoaded = remember{ mutableStateOf(false) }
 
 
     Column(
@@ -150,7 +153,7 @@ fun CompareScreen(
             ) {
                 LaunchedEffect(key1=gameState.isFinish) {
                     if(gameState.isFinish){
-                        navController.navigate(Screen.GameOverScreen.withArgs("${gameState.score}")){
+                        navController.navigate(Screen.GameOverScreen.withArgs("${gameState.score}","normal")){
                             popUpTo(Screen.NormalMode.route){
                                 saveState =true
                                 inclusive =true
@@ -158,8 +161,8 @@ fun CompareScreen(
                         }
                     }
                 }
-                MovieContainer(movie = listMovie[movieIndex], isLeft = true)
-                MovieContainer(movie = listMovie[movieIndex + 1], isLeft = false)
+                MovieContainer(movie = listMovie[movieIndex], isLeft = true, isImageLoaded = isLeftImageLoaded)
+                MovieContainer(movie = listMovie[movieIndex + 1], isLeft = false, isImageLoaded = isRightImageLoaded)
             }
 
             if (!gameState.isAnswered) {
@@ -227,27 +230,31 @@ fun CompareScreen(
             val scope = rememberCoroutineScope()
             CompareButton(
                 title = "LOWER",
-                icon = Icons.Default.KeyboardArrowUp,
+                icon = Icons.Default.KeyboardArrowDown,
                 color = SoftRed,
                 onClick = {
-                    viewModel.onCompareClick(
-                        movieIndex = movieIndex,
-                        list = listMovie,
-                        isHigher = false
-                    )
+                    if(isRightImageLoaded.value&&isLeftImageLoaded.value){
+                        viewModel.onCompareClick(
+                            movieIndex = movieIndex,
+                            list = listMovie,
+                            isHigher = false
+                        )
+                    }
                     Log.d(TAG, "${movieIndex}")
                 })
             Spacer(modifier = modifier.padding(start = 2.dp, end = 2.dp))
             CompareButton(
                 title = "HIGHER",
-                icon = Icons.Default.KeyboardArrowDown,
+                icon = Icons.Default.KeyboardArrowUp,
                 color = SoftGreen,
                 onClick = {
-                    viewModel.onCompareClick(
-                        movieIndex = movieIndex,
-                        list = listMovie,
-                        isHigher = true
-                    )
+                    if(isRightImageLoaded.value&&isLeftImageLoaded.value){
+                        viewModel.onCompareClick(
+                            movieIndex = movieIndex,
+                            list = listMovie,
+                            isHigher = true
+                        )
+                    }
                 }
             )
 

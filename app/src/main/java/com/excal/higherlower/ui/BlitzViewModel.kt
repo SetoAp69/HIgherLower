@@ -7,18 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.excal.higherlower.component.CompareMovie
 import com.excal.higherlower.data.Movie
 import com.excal.higherlower.data.MovieRepository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-sealed class UiState<out T> {
-    object Loading : UiState<Nothing>()
-    data class Success<T>(val data: T) : UiState<T>()
-    data class Error(val message: String) : UiState<Nothing>()
-}
-class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel() {
+
+class BlitzViewModel(private val movieRepository: MovieRepository) : ViewModel() {
 
     //To determine the UI state, wether is it ready or not to start the game
     private val _movieListFlow = MutableStateFlow<UiState<List<Movie>>>(UiState.Loading)
@@ -27,10 +24,13 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
     private lateinit var currentLastMovie: Movie
 
     //To determine in gamestate
-    private val _gameState = MutableStateFlow(GameState())
-    val gameState: StateFlow<GameState> = _gameState
+    private val _gameState = MutableStateFlow(BlitzGameState())
+    val gameState: StateFlow<BlitzGameState> = _gameState
 
     private var currentScore = 0
+    private var currentStreak = 0
+
+    private var timerJob: Job? = null
 
     init {
         fetchMovie()
@@ -44,23 +44,10 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
             try {
                 var call = movieRepository.getMovies(authKey, page).shuffled()
 
-                val data = if (pageIndex != 0) {
-                    call.mapIndexed { index, movie ->
-                        if (index == 0) {
-                            currentLastMovie
-                        } else {
-                            movie
-                        }
-                    }
-                } else {
-                    call
-                }
-                //Update new LastMovie on the list
-                currentLastMovie=data[data.size-1]
                 //Changing UI State
-                _movieListFlow.value = UiState.Success(data)
+                _movieListFlow.value = UiState.Success(call)
 
-                Log.d(TAG,"Successfully fetch the data")
+                Log.d(TAG, "Successfully fetch the data")
 
             } catch (e: Exception) {
                 Log.i(TAG, "Error Getting Movie Data")
@@ -68,98 +55,142 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
         }
     }
 
-    fun setImageReady(){
-        _gameState.update{
+    fun startTimer() {
+        timerJob?.cancel()
+        timerJob = viewModelScope.launch {
+            while (_gameState.value.timer > 0) {
+                delay(1000)
+                _gameState.update {
+                    it.copy(
+                        timer = it.timer - 1
+                    )
+                }
+            }
+        }
+    }
+
+    fun nextMovie() {
+        viewModelScope.launch {
+            Log.d(TAG, "nextMovie() called")
+            if (_gameState.value.timer == 0 && !_gameState.value.isAnswered) {
+                currentStreak = 0
+                _gameState.update {
+                    it.copy(
+                        movieIndex = it.movieIndex + 1,
+                        streak = 0,
+                        timer = 10
+                    )
+                }
+            }
+        }
+    }
+
+    fun setImageReady() {
+        _gameState.update {
             it.copy(
                 isImageReady = true
             )
         }
     }
-    fun setImageNotReady(){
-        _gameState.update{
+
+    fun setImageNotReady() {
+        _gameState.update {
             it.copy(
                 isImageReady = false
             )
         }
     }
 
+
     fun onCompareClick(movieIndex: Int, list: List<Movie>, isHigher: Boolean) {
         viewModelScope.launch {
             val currentState = _gameState.value
             val listSize = list.size
-            if (!currentState.isAnswered) {
-                if (!_gameState.value.isOutOfMovie) {
+            if (currentState.timer == 0) {
+                if (_gameState.value.movieIndex != listSize - 2) {
+                    _gameState.update {
+                        it.copy(
+                            movieIndex = it.movieIndex + 1
+                        )
+                    }
+                } else {
+                    _gameState.update {
+                        it.copy(
+                            isFinish = true
+                        )
+                    }
+                }
+
+                currentStreak = 0
+            } else {
+                if (!_gameState.value.isAnswered) {
                     if (isHigher) {
-                        if(CompareMovie(list[movieIndex + 1], list[movieIndex])){
+                        if (CompareMovie(list[movieIndex + 1], list[movieIndex])) {
                             _gameState.update {
                                 it.copy(
                                     isCorrect = true,
                                 )
                             }
-                            currentScore++
+                            currentStreak++
+                            currentScore =
+                                (currentScore+50*((10-_gameState.value.timer)/10)+50*(0.1*currentStreak))
+                                    .toInt()
 
-                        }else{
+                        } else {
                             _gameState.update {
                                 it.copy(
                                     isCorrect = false,
-                                    isFinish = true,
                                 )
                             }
+                            currentStreak = 0
                         }
-                    } else if (!isHigher  ) {
-                        if(CompareMovie(list[movieIndex], list[movieIndex + 1])){
+                    } else {
+                        if (CompareMovie(list[movieIndex], list[movieIndex + 1])) {
                             _gameState.update {
                                 it.copy(
                                     isCorrect = true,
                                 )
                             }
-                            currentScore++
+                            currentStreak++
+                            currentScore =
+                                (currentScore + 50 * ((10 - _gameState.value.timer) / 10) + 50 * (0.1 * currentStreak))
+                                    .toInt()
 
-                        }else{
+
+                        } else {
                             _gameState.update {
                                 it.copy(
                                     isCorrect = false,
-                                    isFinish = true,
                                 )
                             }
+                            currentStreak = 0
                         }
-
                     }
                     _gameState.update {
                         it.copy(
+                            streak = currentStreak,
                             score = currentScore,
                             isAnswered = true
                         )
                     }
-                    delay(1000L)
 
-                    if(_gameState.value.isFinish){
-                        Log.d(TAG,"GAME FINISHED ! ")
-                    }else{
+                    delay(1000L)
+                    if (!_gameState.value.isFinish) {
                         _gameState.update {
                             it.copy(
-
                                 isAnswered = false,
                                 isCorrect = false,
                                 movieIndex = if (movieIndex == listSize - 2) movieIndex else movieIndex + 1,
-                                isOutOfMovie = movieIndex == listSize - 2,
-                                page = if(movieIndex==listSize-2) it.page+1 else it.page
+                                isFinish = movieIndex == listSize - 2,
+                                timer = 10
+
 
                             )
                         }
+
                     }
-                    if(_gameState.value.isOutOfMovie){
-                        fetchMovie(pageIndex = _gameState.value.page)
-                        _gameState.update {
-                            it.copy(
-                                movieIndex = 0,
-                                isOutOfMovie = false
-                            )
-                        }
-                    }
+
                 }
-
-
             }
         }
     }

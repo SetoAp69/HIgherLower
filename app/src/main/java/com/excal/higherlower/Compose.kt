@@ -31,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.excal.higherlower.component.BlitzModeScreen
 import com.excal.higherlower.component.CompareScreen
 import com.excal.higherlower.component.SignInScreen
 import com.excal.higherlower.component.MainMenuScreen
@@ -60,8 +61,10 @@ class Compose : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HIgherLowerTheme {
+//                val navController= rememberNavController()
                 Surface(modifier = Modifier.fillMaxSize()) {
                     Navigation(googleAuthClient = googleAuthClient, this@Compose)
+
                 }
 
 
