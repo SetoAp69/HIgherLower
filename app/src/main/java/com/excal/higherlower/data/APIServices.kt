@@ -16,5 +16,5 @@ interface APIServices {
         @Query("language") language: String = "en-US",
         @Query("page") page: Int ,
         @Query("sort_by") sortBy: String = "popularity.desc"
-    ): MovieResponse
+    ): MovieResponses
 }

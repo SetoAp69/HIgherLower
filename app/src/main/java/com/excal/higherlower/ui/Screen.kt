@@ -6,6 +6,7 @@ sealed class Screen(val route:String) {
     object GameOverScreen:Screen("game_over")
     object NormalMode:Screen("normal_mode")
     object BlitzMode:Screen("blitz_mode")
+    object Demo:Screen("demo")
 
     fun withArgs(vararg args:String):String{
         return buildString {

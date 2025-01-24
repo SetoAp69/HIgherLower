@@ -101,6 +101,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:23.1.0")
     //Firebase Google Play Services
     implementation("com.google.android.gms:play-services-auth:21.3.0")
+    //Firbase RTDB
+    implementation("com.google.firebase:firebase-database:21.0.0")
 
     //credentials
     implementation("androidx.credentials:credentials:1.3.0")

@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.excal.higherlower.component.BlitzModeScreen
+import com.excal.higherlower.component.DemoScreen
 import com.excal.higherlower.component.GameOverScreen
 import com.excal.higherlower.component.MainMenuScreen
 import com.excal.higherlower.component.NormalModeScreen
@@ -120,13 +121,20 @@ fun Navigation(googleAuthClient: GoogleAuthClient, lifecycleOwner: LifecycleOwne
                 }
 
             )
-        ) { entry ->
+        ) {
+            entry ->
+            val viewModel= viewModel<GameOverViewModel>()
+
             GameOverScreen(
                 score = entry.arguments?.getInt("score"),
                 navController = navController,
+
                 mode = entry.arguments?.getString("mode")
             )
 
+        }
+        composable(Screen.Demo.route){
+            DemoScreen(navController=navController)
         }
 
 

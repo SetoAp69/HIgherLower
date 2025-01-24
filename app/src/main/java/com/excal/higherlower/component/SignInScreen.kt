@@ -41,7 +41,7 @@ fun SignInScreen(modifier: Modifier = Modifier, state: SignInState, onSignInClic
 
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
-            painter = painterResource(id = R.drawable.app_logo_placeholder),
+            painter = painterResource(id = R.drawable.hilo_icon_hd),
             contentDescription = null,
             modifier = modifier
                 .padding(top = 70.dp)
