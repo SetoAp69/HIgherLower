@@ -38,7 +38,7 @@ class MovieViewModel(private val movieRepository: MovieRepository) : ViewModel()
 
     fun fetchMovie(pageIndex: Int = 0) {
         val authKey =
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MWM2ODZiZWFiOTlkYTRmZmZlYzM0OGU5Yzc4NTg5NSIsIm5iZiI6MTczNjAzMzM3Ny43NjE5OTk4LCJzdWIiOiI2Nzc5YzQ2MTJiMDk3YjE1YTI3NGNiNDIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.nWUbIv3UjN1PEkjNtLE_KPSjBS52JMQntn4ej5yEVv8"
+            ""
         val page = (Math.ceil((Math.random() * 10)) + pageIndex).toInt()
         viewModelScope.launch {
             try {
